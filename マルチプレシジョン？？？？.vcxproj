@@ -129,12 +129,14 @@
   <ItemGroup>
     <ClCompile Include="BigInt.cpp" />
     <ClCompile Include="MemoryAllocator.cpp" />
+    <ClCompile Include="Multiprecision.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="ソース.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BigInt.h" />
     <ClInclude Include="MemoryAllocator.h" />
+    <ClInclude Include="Multiprecision.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
