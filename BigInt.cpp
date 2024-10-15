@@ -520,3 +520,46 @@ BigInt Mod(BigInt& In,T Number){
 
     return C;
 }
+bool EQ(BigInt& In, BigInt& B) {
+    for (size_t i = 0; Size(In.Dight) < i; i++) {
+        if (Index(In.Dight,i) == NULL) return false;
+        if (Index(B.Dight,i) == NULL) return false;
+        if (*Index(In.Dight, i) != *Index(B.Dight, i)) { return false; }
+    }
+
+    return true:
+
+}
+bool NotEQ(BigInt& In, BigInt& B) {
+    for (size_t i = 0; Size(In.Dight) < i; i++) {
+        if (Index(In.Dight,i) == NULL) return false;
+        if (Index(B.Dight,i) == NULL) return false;
+        if (*Index(In.Dight, i) == *Index(B.Dight, i)) { return false; }
+    }
+
+    return true:
+}
+int UpperLeft(BigInt& In, BigInt& B) {// 1=>left 0=>EQ -1=> right 
+
+    if (BitCount(In) > BitCount(B)) { return 1; }
+    if (BitCount(In) < BitCount(B)) { return -1; }
+    
+        for (intmax_t i = Size(In.Dight) - 1; 0 <= i; i--) {
+        if (BitIndex(In) < BitIndex(B)) { return -1; }
+        if (BitIndex(In) > BitIndex(B)) { return 1; }
+    }
+
+    return 0:
+}
+int UpperRight(BigInt& In, BigInt& B) {// -1=>left 0=>EQ 1=> right
+
+    if (BitCount(In) > BitCount(B)) { return -1; }
+    if (BitCount(In) < BitCount(B)) { return 1; }
+    
+        for (intmax_t i = Size(In.Dight) - 1; 0 <= i; i--) {
+        if (BitIndex(In) < BitIndex(B)) { return 1; }
+        if (BitIndex(In) > BitIndex(B)) { return -1; }
+    }
+
+    return 0:
+}
