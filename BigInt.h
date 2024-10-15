@@ -61,9 +61,10 @@ bool SubEQ(BigInt& In, BigInt& B);
 BigInt LeftShift(BigInt& In, size_t X);
 BigInt RightShift(BigInt& In, size_t X);
 bool MulEQ(BigInt& In, BigInt B);
-BigInt Mul(BigInt& In, BigInt& B)
+BigInt Mul(BigInt& In, BigInt& B);
 bool DivEQ(BigInt& In, BigInt B);
 BigInt Div(BigInt& In, BigInt& B);
+bool ModEQ(BigInt& In, BigInt B);
 BigInt Mod(BigInt& In, BigInt B);
 bool Inclimental(BigInt& In);
 bool Declimental(BigInt& In);
@@ -72,3 +73,7 @@ template<class T> BigInt Sub(BigInt& In, T Number);
 template<class T> BigInt Mul(BigInt& In, T Number);
 template<class T> BigInt Div(BigInt& In, T Number);
 template<class T> BigInt Mod(BigInt& In, T Number);
+bool EQ(BigInt& In, BigInt& B);
+bool NotEQ(BigInt& In, BigInt& B);
+int UpperLeft(BigInt& In, BigInt& B);// 1=>left 0=>EQ -1=> right 
+int UpperRight(BigInt& In, BigInt& B);// -1=>left 0=>EQ 1=> right

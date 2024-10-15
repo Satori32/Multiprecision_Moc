@@ -192,14 +192,14 @@ BigInt Not(BigInt& In) {
 
     BigInt C = ConstructBigInt();
 
-    for (size_t i = 0; i < BitCount(B); i++) {
+    for (size_t i = 0; i < BitCount(In); i++) {
         bool X = Not(In, i);
         BitPush(C, X);
     }
     return C;
 }
 bool XorEQ(BigInt& In, BigInt& B) {
-    BigInt C = Or(In, B);
+    BigInt C = Xor(In, B);
     Free(In);
     In = C;
     return true;
@@ -215,7 +215,7 @@ BigInt Xor(BigInt& In, BigInt& B) {
     return C;
 }
 bool NandEQ(BigInt& In, BigInt& B) {
-    BigInt C = Or(In, B);
+    BigInt C = Nand(In, B);
     Free(In);
     In = C;
     return true;
@@ -231,7 +231,7 @@ BigInt Nand(BigInt& In, BigInt& B) {
     return C;
 }
 bool NorEQ(BigInt& In, BigInt& B) {
-    BigInt C = Or(In, B);
+    BigInt C = Nor(In, B);
     Free(In);
     In = C;
     return true;
@@ -247,7 +247,7 @@ BigInt Nor(BigInt& In, BigInt& B) {
     return C;
 }
 bool EqualEQ(BigInt& In, BigInt& B) {
-    BigInt C = Or(In, B);
+    BigInt C = Equal(In, B);
     Free(In);
     In = C;
     return true;
@@ -338,8 +338,12 @@ bool From(BigInt& In, char* S, size_t L) {
     BigInt A = MakeBasic(1);
     BigInt B = MakeBasic(10);
     for (intmax_t i = L - 1; i >= 0; i--) {
-        char X[2] = { S[i],'\0' }
-        AddEQ(In, Mul(A,atoi(X));
+        char X[2] = { S[i],'\0' };
+        BigInt I = MakeBasic(atoi(X));
+        BigInt M = Mul(A, I);
+        AddEQ(In, M);
+        Free(I);
+        Free(M);
         
         MulEQ(A, B);
     }
@@ -425,7 +429,9 @@ BigInt  Mul(BigInt& In, BigInt& B) {
     size_t L = BitCount(B);
     for (size_t i = 0; i < L; i++) {
         if (And(B, true, i) == true) {
-            AddEQ(C, LeftShift(In, i));
+            BigInt X = LeftShift(In, i);
+            AddEQ(C, X);
+            Free(X);
         }
 
     }
@@ -449,14 +455,21 @@ BigInt Div(BigInt& In, BigInt& B) {
     size_t L = BitCount(B);
     for (intmax_t i = L; i >= 0; i--) {
         if (And(B, true, i) == true) {
-            SubEQ(C, LeftShift(In, i));
+            BigInt X = LeftShift(In, i);
+            SubEQ(C, X);
+            Free(X);
         }
 
     }
     return C;
 }
-
-BigInt Mod(BigInt& In, BigInt B) {
+bool ModEQ(BigInt& In, BigInt& B) {
+    BigInt C = Mod(In, B);
+    Free(In);
+    In = C;
+    return true;
+}
+BigInt Mod(BigInt& In, BigInt& B) {
     BigInt C = Div(In, B);
     BigInt D = Mul(C, B);
     BigInt E = Sub(In, D);
@@ -527,7 +540,7 @@ bool EQ(BigInt& In, BigInt& B) {
         if (*Index(In.Dight, i) != *Index(B.Dight, i)) { return false; }
     }
 
-    return true:
+    return true;
 
 }
 bool NotEQ(BigInt& In, BigInt& B) {
@@ -537,7 +550,7 @@ bool NotEQ(BigInt& In, BigInt& B) {
         if (*Index(In.Dight, i) == *Index(B.Dight, i)) { return false; }
     }
 
-    return true:
+    return true;
 }
 int UpperLeft(BigInt& In, BigInt& B) {// 1=>left 0=>EQ -1=> right 
 
@@ -545,21 +558,21 @@ int UpperLeft(BigInt& In, BigInt& B) {// 1=>left 0=>EQ -1=> right
     if (BitCount(In) < BitCount(B)) { return -1; }
     
         for (intmax_t i = Size(In.Dight) - 1; 0 <= i; i--) {
-        if (BitIndex(In) < BitIndex(B)) { return -1; }
-        if (BitIndex(In) > BitIndex(B)) { return 1; }
+        if (BitIndex(In,i) < BitIndex(B,i)) { return -1; }
+        if (BitIndex(In,i) > BitIndex(B,i)) { return 1; }
     }
 
-    return 0:
+        return 0;
 }
 int UpperRight(BigInt& In, BigInt& B) {// -1=>left 0=>EQ 1=> right
 
     if (BitCount(In) > BitCount(B)) { return -1; }
     if (BitCount(In) < BitCount(B)) { return 1; }
-    
-        for (intmax_t i = Size(In.Dight) - 1; 0 <= i; i--) {
-        if (BitIndex(In) < BitIndex(B)) { return 1; }
-        if (BitIndex(In) > BitIndex(B)) { return -1; }
+
+    for (intmax_t i = Size(In.Dight) - 1; 0 <= i; i--) {
+        if (BitIndex(In, i) < BitIndex(B, i)) { return 1; }
+        if (BitIndex(In, i) > BitIndex(B, i)) { return -1; }
     }
 
-    return 0:
+    return 0;
 }

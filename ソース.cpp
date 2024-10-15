@@ -68,6 +68,42 @@ Multiprecision Mod(Multiprecision& In, Multiprecision B) {
 	return C;
 }
 template<class T>
+Multiprecision Add(Multiprecision& in, T N) {
+	Multiprecision X = ConstructMultipecision(N);
+	Multiprecision A = Add(In, X);
+	Free(X);
+	return A;
+}
+template<class T>
+Multiprecision Sub(Multiprecision& in, T N) {
+	Multiprecision X = ConstructMultipecision(N);
+	Multiprecision A = Sub(In, X);
+	Free(X);
+	return A;
+}
+template<class T>
+Multiprecision Mul(Multiprecision& in, T N) {
+	Multiprecision X = ConstructMultipecision(N);
+	Multiprecision A = Mul(In, X);
+	Free(X);
+	return A;
+}
+template<class T>
+Multiprecision Div(Multiprecision& in, T N) {
+	Multiprecision X = ConstructMultipecision(N);
+	Multiprecision A = Div(In, X);
+	Free(X);
+	return A;
+}
+
+template<class T>
+Multiprecision Mod(Multiprecision& in, T N) {
+	Multiprecision X = ConstructMultipecision(N);
+	Multiprecision A = Mod(In, X);
+	Free(X);
+	return A;
+}
+template<class T>
 bool EQ(Multiprecision& In, T& B) {
 	Multiprecision C = ConstructMultipecision(B);
 	if (NotEQ(C.Frac, In.Frac) == false) { return false; }
@@ -169,50 +205,71 @@ bool Swap(T& A, T& B) {
 	return true;
 }
 template<class T, class U>
-T BisectionMethod(Multiprecision& Low, Multiprecision& High, F *Fun(const U&), std::size_t Lim = 50) {
+Multiprecision BisectionMethod(Multiprecision Low, Multiprecision High, F* Fun(const U&), std::size_t Lim = 50) {
+	Low = ConstructMultipecision(Low.Frac, Low.Number);
+	High = ConstructMultipecision(High.Frac, High.Number);
 
-	if (UpperLeft(Low , High)==1) Swap(Low, High);
+	if (UpperLeft(Low, High) == 1) Swap(Low, High);
 
 
 	Multiprecision XN = ConstructMultipecision(0);
-	Multiprecision X = (Low + High) / 2;
-	int SL = Fun(Low) > 0 ? 1 : -1;
-	int SH = Fun(High) > 0 ? 1 : -1;
+	Multiprecision P = Add(Low, High);
+	Multiprecision X = Div(P, 2);
+	Free(P);
+	int SL = UpperLeft(Fun(Low), 0) ? 1 : -1;
+	int SH = UpperLeft(Fun(High), 0) ? 1 : -1;
 
 	std::size_t C = 0;
-
-	X = (Low + High) / 2;
+	free(X);
+	P = Add(Low, High);
+	X = Div(P, 2);
+	Free(P);
 	int SM = Fun(X) > 0 ? 1 : -1;
 	if (SM == SL) {
 		Free(Low);
-		Low = ConstructMultipecision(X.Frac,X,Number);
+		Low = ConstructMultipecision(X.Frac, X, Number);
 	}
 	else {
 		Free(High);
-		High = ConstructMultipecision(X.Frac,X,Number);;
+		High = ConstructMultipecision(X.Frac, X, Number);;
 	}
 	C++;
 	Multiprecision Z = Sub(X, XN);
 	Multiprecision A = Abs(Z);
-	while (EQ,A) {
+	while (UpperLeft(A, 0) == true) {
 		if (C == Lim && Lim != 0) { break; }
 
 		XN = X;
-		X = (Low + High) / 2;
-		int SM = Fun(X) > 0 ? 1 : -1;
+		P = Add(Low, High);
+		X = Div(P, 2);
+		Free(P);
+		int SM = UpperLeft(Fun(X), 0) ? 1 : -1;
 		if (SM == SL) {
+			Free(Low);
 			Low = X;
 		}
 		else {
+			Free(High);
 			High = X;
 		}
 		C++;
+		Free(Z);
+		Z = Sub(X, XN);
+		Free(A);
+		A = Abs(Z);
+
 	}
+	Free(Z);
+	Z = Sub(X, XN);
+	Free(A);
+	A = Abs(Z);
+	Free(Low):
+	Free(High);
 	return X;
 }
 
 template<class T = double,class U>
-T NewtonBisectionMethod(T X, T *BMFun(const U&), T *NMFun(const U&), T *NMFD(const T&), std::size_t Lim = 50) {//maybe perfect answer.
+Multiprecision NewtonBisectionMethod(Multiprecision& X, T *BMFun(const U&), T *NMFun(const U&), T *NMFD(const T&), std::size_t Lim = 50) {//maybe perfect answer.
 	Multiprecision A = NewtonMethod<T>(X, NMFun, NMFunDash, Lim);
 	Multiprecision B = BisectionMethod(L, H, BMFun, Lim);
 	Free(A);
